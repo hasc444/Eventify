@@ -4,7 +4,7 @@ const { newUser, loginUser, verifyOtp } = require('../controllers/authController
 
 router.post('/createUser', newUser);
 router.post('/login', loginUser);
-// router.post('/verify-otp', verifyOtp);
+router.post('/verify-otp', verifyOtp);
 
 
 

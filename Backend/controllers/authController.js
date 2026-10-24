@@ -3,8 +3,8 @@ const OTP= require('../models/OTP');
 const bcrypt = require('bcryptjs'); 
 const { sendBookingEmail, sendOTPEmail }= require('../utils/email');
 const jwt = require('jsonwebtoken');
-const { body, validationResult } = require('express-validator');
 
+//ROUTE 1: Create a user using: Post "/api/auth/newUser" No login required
 exports.newUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -35,12 +35,8 @@ exports.newUser = async (req, res) => {
   }
 };
 
-
+//ROUTE 2: Authenticate a user using: Post "/api/auth/login" No login required
 exports.loginUser = async (req, res) => {
-    // const errors = validationResult(req);
-    //     if (!errors.isEmpty()) {
-    //     return res.status(400).json({ errors: errors.array() });
-    // }
 
     const {email,password}=req.body
     try{
@@ -63,13 +59,24 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({error: "Account not verified. Please check your email for the OTP to verify your account."});
         }
 
+        const data={
+            user : {id: user.id,
+            role: user.role}
+        }
+
+        const jwtToken= jwt.sign( data, process.env.JWT_SECRET, { expiresIn: '1h' } );
         
-        
-        res.status(200).json({message: "Login successful", user: {id: user.id, name: user.name, email: user.email}});
+        res.json({
+            message: "Login successful",
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            authtoken: jwtToken});
     }
     catch(error){
         console.log(error.message)
         res.status(500).send("Internal Server Error ")
     }
+}
 
-})

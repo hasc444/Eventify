@@ -1,7 +1,7 @@
 const User= require('../models/User'); 
 const OTP= require('../models/OTP');
 const bcrypt = require('bcryptjs'); 
-const { sendBookingEmail, sendOTPEmail }= require('../utils/email');
+const { sendOTPEmail }= require('../utils/email');
 const jwt = require('jsonwebtoken');
 
 //ROUTE 1: Create a user using: Post "/api/auth/createUser" No login required

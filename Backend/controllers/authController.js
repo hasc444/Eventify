@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { sendBookingEmail, sendOTPEmail }= require('../utils/email');
 const jwt = require('jsonwebtoken');
 
-//ROUTE 1: Create a user using: Post "/api/auth/newUser" No login required
+//ROUTE 1: Create a user using: Post "/api/auth/createUser" No login required
 exports.newUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -13,11 +13,11 @@ exports.newUser = async (req, res) => {
         return res.status(400).json({ error: 'User already exists' });
     }
 
-    const salt= bcrypt.genSalt(10); 
-    const hashPassword= await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10); 
+    const hashPassword = await bcrypt.hash(password, salt);
 
   try {
-    const user = new User.create({ name, email, password : hashPassword, role: 'user' });
+    const user = await User.create({ name, email, password : hashPassword, role: 'user' });
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     console.log(`OTP for ${email}: ${otp}`);

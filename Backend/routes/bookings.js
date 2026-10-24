@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getBookings, createBooking, deleteBooking } = require('../controllers/bookingController');
+const {verifying,verifyingAdmin} = require('../middleware/auth');
 
-// Get all bookings
-router.get('/', getBookings);   
+router.post('/', verifying, bookEvent)
+router.post('/send-otp', verifying, bookingOtp)
+router.get('/my', verifying, getBookings)
+router.put('/:id/confirm', verifying, verifyingAdmin, confirmBooking)
+router.delete('/:id', verifying, cancelBooking)
 
-// Create a new booking
-router.post('/', createBooking);
-
-// Delete a booking
-router.delete('/:id', deleteBooking);
+module.exports = router;

@@ -7,7 +7,7 @@ const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-//Route: POST /api/bookings/send-otp
+//Route: POST /api/booking/send-otp
 exports.bookingOtp = async (req, res) => {
     const otp = generateOTP();
     await OTP.findOneAndDelete({ email: req.user.email, action: 'event_booking' });
@@ -16,7 +16,7 @@ exports.bookingOtp = async (req, res) => {
     res.status(200).json({ message: 'OTP sent to your email for booking confirmation.' });
 } 
 
-//Route: Post /api/bookings/
+//Route: Post /api/booking/
 exports.bookEvent = async (req, res) => {
     const { eventId, otp } = req.body;
     const existingOtp = await OTP.findOne({ email: req.user.email, action: 'event_booking' });
@@ -50,7 +50,7 @@ exports.bookEvent = async (req, res) => {
     res.status(201).json({ message: 'Booking created successfully. Please confirm your booking.', bookingId: booking._id });
 }
 
-// Route: PUT /api/bookings/:id/confirm
+// Route: PUT /api/booking/:id/confirm
 exports.confirmBooking = async (req, res) => {
 
     const paymentStatus = req.body.paymentStatus;
@@ -87,13 +87,13 @@ exports.confirmBooking = async (req, res) => {
     res.status(200).json({ message: 'Booking confirmed successfully.' });
 }
 
-//Route: GET /api/bookings/my
+//Route: GET /api/booking/my
 exports.getBookings = async (req, res) => {
     const bookings = await Booking.find({ user: req.user._id }).populate('eventId', 'title date location');
     res.status(200).json(bookings);
 }
 
-//Route: DELETE /api/bookings/:id
+//Route: DELETE /api/booking/:id
 exports.cancelBooking = async (req, res) => {
 
     const booking = await Booking.findById(req.params.id);

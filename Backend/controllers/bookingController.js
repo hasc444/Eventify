@@ -50,7 +50,7 @@ exports.bookEvent = async (req, res) => {
     res.status(201).json({ message: 'Booking created successfully. Please confirm your booking.', bookingId: booking._id });
 }
 
-// Route: PUT /api/booking/:id/confirm
+// Route: PUT /api/booking/bookingId/confirm
 exports.confirmBooking = async (req, res) => {
 
     const paymentStatus = req.body.paymentStatus;
@@ -89,7 +89,7 @@ exports.confirmBooking = async (req, res) => {
 
 //Route: GET /api/booking/my
 exports.getBookings = async (req, res) => {
-    const bookings = await Booking.find({ user: req.user._id }).populate('eventId', 'title date location');
+    const bookings = await Booking.find({ userId: req.user._id }).populate('eventId', 'title date location');
     res.status(200).json(bookings);
 }
 
@@ -101,7 +101,7 @@ exports.cancelBooking = async (req, res) => {
         return res.status(404).json({ error: 'Booking not found.' });
     }
 
-    if (booking.user.toString() !== req.user._id) {
+    if (booking.userId.toString() !== req.user._id) {
         return res.status(403).json({ error: 'You are not authorized to cancel this booking.' });
     }
 

@@ -33,13 +33,13 @@ exports.bookEvent = async (req, res) => {
         return res.status(400).json({ error: 'No seats available for this event.' });
     }
 
-    const existingBooking = await Booking.findOne({ user: req.user.id, event: eventId });
+    const existingBooking = await Booking.findOne({ userId: req.user._id, eventId });
     if (existingBooking) {
         return res.status(400).json({ error: 'You have already booked this event.' });
     }
 
     const booking = await Booking.create({
-        user: req.user.id,
+        userId : req.user._id,
         eventId,
         status: 'pending',
         paymentStatus: 'non_paid',

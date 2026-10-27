@@ -21,7 +21,7 @@ const validateAuth = [
 
 router.post('/createUser', validateAuth, newUser);
 router.post('/login', validateAuth, loginUser);
-router.post('/verify-otp', validateAuth, verifyOtp);
+router.post('/verify-otp', verifyOtp);
 
 
 
